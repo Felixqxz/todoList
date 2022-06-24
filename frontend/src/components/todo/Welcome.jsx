@@ -1,60 +1,25 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import HelloWorldService from '../../api/todo/HelloWorldService.js'
 
-class WelcomeComponent extends Component {
+export default function WelcomeComponent() {
+    const [msg, setMsg] = useState("");
+    const params = useParams()
 
-    constructor(props) {
-        super(props)
-        this.retrieveWelcomeMessage = this.retrieveWelcomeMessage.bind(this)
-        this.state = {
-            welcomeMessage: ''
-        }
-        this.handleSuccessfulResponse = this.handleSuccessfulResponse.bind(this)
-        this.handleError = this.handleError.bind(this)
+    const retrieveWelcomeMessage = () => {
+
+
+        HelloWorldService.executeHelloWorldPathVariableService(params.name)
+            .then(response => handleSuccessfulResponse(response))
+            .catch(error => handleError(error))
     }
 
-    render() {
-        return (
-            <>
-                <h1>Welcome!</h1>
-                <div className="container">
-                    Welcome {this.props.match.params.name}.
-                    You can manage your todos <Link to="/todos">here</Link>.
-                </div>
-                <div className="container">
-                    Click here to get a customized welcome message.
-                    <button onClick={this.retrieveWelcomeMessage}
-                        className="btn btn-success">Get Welcome Message</button>
-                </div>
-                <div className="container">
-                    {this.state.welcomeMessage}
-                </div>
-
-            </>
-        )
-    }
-
-    retrieveWelcomeMessage() {
-        // HelloWorldService.executeHelloWorldService()
-        // .then( response => this.handleSuccessfulResponse(response) )
-
-        // HelloWorldService.executeHelloWorldBeanService()
-        // .then( response => this.handleSuccessfulResponse(response) )
-
-        HelloWorldService.executeHelloWorldPathVariableService(this.props.match.params.name)
-            .then(response => this.handleSuccessfulResponse(response))
-            .catch(error => this.handleError(error))
-    }
-
-    handleSuccessfulResponse(response) {
+    const handleSuccessfulResponse = (response) => {
         console.log(response)
-        this.setState({ welcomeMessage: response.data.message })
+        setMsg({ welcomeMessage: response.data.message })
     }
 
-    handleError(error) {
-
-        console.log(error.response)
+    const handleError = (error) => {
 
         let errorMessage = '';
 
@@ -65,10 +30,29 @@ class WelcomeComponent extends Component {
             errorMessage += error.response.data.message
         }
 
-        this.setState({ welcomeMessage: errorMessage })
+        setMsg(errorMessage)
     }
+
+
+    return (
+        <>
+            <h1>Welcome!</h1>
+            <div className="container">
+                Welcome {params.name}.
+                You can manage your todos <Link to="/todos">here</Link>.
+            </div>
+            <div className="container">
+                Click here to get a customized welcome message.
+                <button onClick={retrieveWelcomeMessage}
+                    className="btn btn-success">Get Welcome Message</button>
+            </div>
+            <div className="container">
+                {msg}
+            </div>
+
+        </>
+    )
+
 
 }
 
-
-export default WelcomeComponent

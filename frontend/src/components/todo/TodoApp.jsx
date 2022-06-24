@@ -10,7 +10,7 @@ import Logout from './Logout.jsx'
 import Welcome from './Welcome.jsx'
 import TodoComponent from './TodoComponent.jsx'
 
-function TodoApp() {
+export default function TodoApp() {
     return (
         <div className="TodoApp">
             <Router>
@@ -33,5 +33,3 @@ function TodoApp() {
         </div>
     )
 }
-
-export default TodoApp

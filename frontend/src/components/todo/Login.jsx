@@ -15,11 +15,12 @@ export default function Login() {
     const navigate = useNavigate()
 
     const handleChange = (event) => {
+        const {name, value} = event.target
 
         setLoginForm(prevLoginForm => {
             return {
-                [event.target.name]: event.target.value,
-                ...prevLoginForm
+                ...prevLoginForm,
+                [name]: value
                 }
             })
     }
@@ -33,11 +34,11 @@ export default function Login() {
                 AuthenticationService.registerSuccessfulLoginForJwt(loginForm.username, response.data.token)
                 navigate(`/welcome/${loginForm.username}`)
             }).catch(() => {
-                setLoginForm(loginForm => {
+                setLoginForm(prevLoginForm => {
                     return {
+                        ...prevLoginForm,
                         showSuccessMessage: false,
-                        hasLoginFailed: true,
-                        ...loginForm
+                        hasLoginFailed: true
                     }
                 })
             })
@@ -55,8 +56,10 @@ export default function Login() {
                     {loginForm.showSuccessMessage && 
                         <div>Login Sucessful</div>}
 
-                    User Name: <input type="text" name="username" value={loginForm.username} onChange={handleChange} />
-                    Password: <input type="password" name="password" value={loginForm.password} onChange={handleChange} />
+                    <form>
+                        User Name: <input type="text" name="username" value={loginForm.username} onChange={handleChange} />
+                        Password: <input type="password" name="password" value={loginForm.password} onChange={handleChange} />
+                    </form>
                     
                     <button className="btn btn-success" onClick={loginClicked}>Login</button>
                 </div>

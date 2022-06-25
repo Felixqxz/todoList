@@ -16,15 +16,13 @@ export default function WelcomeComponent() {
 
     const handleSuccessfulResponse = (response) => {
         console.log(response)
-        setMsg({ welcomeMessage: response.data.message })
+        setMsg(response.data.message)
     }
 
     const handleError = (error) => {
 
-        let errorMessage = '';
 
-        if (error.message)
-            errorMessage += error.message
+        let errorMessage = error.message ? error.message : ''
 
         if (error.response && error.response.data) {
             errorMessage += error.response.data.message

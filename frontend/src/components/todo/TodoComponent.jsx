@@ -37,7 +37,7 @@ export default function TodoComponent(props) {
         if (!values.description) {
             errors.description = 'Enter a Description'
         } else if (values.description.length < 5) {
-            errors.description = 'Enter atleast 5 Characters in Description'
+            errors.description = 'Enter at least 5 Characters in Description'
         }
 
         if (!moment(values.targetDate).isValid()) {

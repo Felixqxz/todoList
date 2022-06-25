@@ -1,4 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState} from 'react'
+import { useNavigate } from "react-router-dom"
+
 
 import AuthenticationService from './AuthenticationService.js'
 
@@ -9,6 +11,8 @@ export default function Login() {
         hasLoginFailed: false,
         showSuccessMessage: false
     });
+
+    const navigate = useNavigate()
 
     const handleChange = (event) => {
 
@@ -26,8 +30,8 @@ export default function Login() {
         AuthenticationService
             .executeJwtAuthenticationService(loginForm.username, loginForm.password)
             .then((response) => {
-                AuthenticationService.registerSuccessfulLoginForJwt(this.state.username, response.data.token)
-                this.props.history.push(`/welcome/${loginForm.username}`)
+                AuthenticationService.registerSuccessfulLoginForJwt(loginForm.username, response.data.token)
+                navigate(`/welcome/${loginForm.username}`)
             }).catch(() => {
                 setLoginForm(loginForm => {
                     return {
